@@ -11,9 +11,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="智能衣橱" />
     
-    <!-- 桌面图标 -->
-    <link rel="apple-touch-icon" href="icon.png" />
-    <link rel="icon" type="image/png" href="icon.png" />
+    <!-- 桌面图标：public/icon.png；根路径写法以便 Vite 注入 base（避免无尾斜杠 URL 下 ./ 解析错误） -->
+    <link rel="apple-touch-icon" sizes="180x180" type="image/png" href="/icon.png" />
+    <link rel="apple-touch-icon-precomposed" href="/icon.png" />
+    <link rel="icon" type="image/png" href="/icon.png" />
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -132,6 +133,18 @@
         min-height: 100vh;
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
         background: #fafaf9;
+      }
+
+      /* iOS 添加到主屏幕：fixed inset-0 底部常未盖住 Home Indicator 外区域，蒙层露白条 */
+      .ios-full-bleed-overlay {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+        min-height: 100dvh;
+        min-height: 100lvh;
+        min-height: -webkit-fill-available;
       }
     </style>
   <script type="importmap">

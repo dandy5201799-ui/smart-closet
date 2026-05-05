@@ -1,9 +1,12 @@
 # 构建 Vite 产物并推送到 gh-pages 分支，供 GitHub Pages 使用。
 # 仓库 Settings → Pages → Build and deployment → Source 选「Deploy from a branch」→ Branch 选 gh-pages / /(root)
 #
-# 在 Settings → Secrets and variables → Actions 中配置 Repository secrets（名称与本地 .env 一致）：
-#   KIMI_API_KEY 或 MOONSHOT_API_KEY、ARK_API_KEY、KIMI_MOONSHOT_HOST 等；可选 KIMI_MODEL、VITE_* 等。
-# 与 Vercel 相同：密钥会打进前端包，公开仓库时任何人可从静态资源中读取，请使用私有仓库或接受风险。
+# Repository secrets（名称须与 .env.example「线上构建」一节一致，值从本机 .env 逐项复制）：
+#   必填：KIMI_API_KEY 或 MOONSHOT_API_KEY；ARK_API_KEY；KIMI_MOONSHOT_HOST（cn / ai）
+#   可选：KIMI_MODEL、KIMI_API_BASE、ARK_IMAGE_ENDPOINT、ARK_IMAGE_MODEL、ARK_OUTFIT_MAX_REF_IMAGES、
+#         VITE_OUTFIT_DEFAULT_CITY、VITE_DOUYIN_PREVIEW_URL
+# 修改任一 Secret 后：Actions → 本 workflow → Re-run all jobs，再强刷浏览器。
+# 与 Vercel 相同：密钥会打进前端包；公开仓库时勿依赖密钥保密。
 
 name: Deploy GitHub Pages
 

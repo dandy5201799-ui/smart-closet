@@ -1020,11 +1020,11 @@ return (
       {showAddItemSheet && (
         <>
           <div
-            className="fixed inset-0 z-[102] bg-stone-900/20 backdrop-blur-sm touch-none"
+            className="ios-full-bleed-overlay z-[102] bg-stone-900/20 backdrop-blur-sm touch-none"
             onClick={closeAddItemSheet}
             aria-hidden
           />
-          <div className="fixed inset-0 z-[103] flex items-end justify-center px-4 pb-8 pointer-events-none">
+          <div className="ios-full-bleed-overlay z-[103] flex items-end justify-center px-4 pb-8 pointer-events-none">
             <div
               className="relative bg-white w-full max-w-md rounded-[32px] p-6 shadow-2xl pointer-events-auto max-h-[min(85dvh,560px)] overflow-y-auto"
               style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
@@ -1154,10 +1154,10 @@ return (
       {showSyncPanel && (
         <>
           <div 
-            className="fixed inset-0 z-[100] bg-stone-900/20 backdrop-blur-sm touch-none h-full w-full transition-opacity" 
+            className="ios-full-bleed-overlay z-[100] bg-stone-900/20 backdrop-blur-sm touch-none h-full w-full transition-opacity" 
             onClick={() => setShowSyncPanel(false)} 
           />
-          <div className="fixed inset-0 z-[101] flex items-end justify-center px-4 pb-8 pointer-events-none">
+          <div className="ios-full-bleed-overlay z-[101] flex items-end justify-center px-4 pb-8 pointer-events-none">
             <div className="relative bg-white w-full max-w-md rounded-[32px] p-8 shadow-2xl animate-in slide-in-from-bottom-10 pointer-events-auto">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-xl font-bold text-stone-900 flex items-center gap-2">
@@ -1200,7 +1200,7 @@ return (
       {/* Item Detail View - Magazine Style */}
       {appState === AppState.ITEM_DETAIL && selectedItem && (
         <div 
-          className="fixed inset-0 bg-stone-50 z-[60] flex flex-col animate-in slide-in-from-right-5 overflow-hidden"
+          className="ios-full-bleed-overlay bg-stone-50 z-[60] flex flex-col animate-in slide-in-from-right-5 overflow-hidden"
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
@@ -1305,7 +1305,7 @@ return (
       {/* Outfit Generation View */}
       {isOutfitDetailVisible && currentOutfit && (
          <div 
-           className="fixed inset-0 bg-stone-50 z-[60] flex flex-col animate-in slide-in-from-bottom-10"
+           className="ios-full-bleed-overlay bg-stone-50 z-[60] flex flex-col animate-in slide-in-from-bottom-10"
            onTouchStart={onTouchStart}
            onTouchMove={onTouchMove}
            onTouchEnd={onTouchEnd}

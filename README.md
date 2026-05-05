@@ -35,7 +35,22 @@
 ## 其它命令
 
 - `npm run build` — 生产构建  
-- `npm run preview` — 预览构建结果  
+- `npm run preview` — 预览**已有**的 `dist/`  
+- `npm run build:preview` — 先构建再预览（模拟线上静态包；需已配置 `.env`，与 CI 注入方式一致）
+
+## 本地正常、线上异常：原因与排查
+
+| 对比 | 本地 `npm run dev` | GitHub Pages / Vercel 生产包 |
+|------|-------------------|------------------------------|
+| Kimi / 方舟请求 | 走 Vite **同源代理**（`vite.config.ts`），减轻浏览器跨域 | 浏览器 **直连** `api.moonshot.*` / `ark.*` |
+| 密钥来源 | 根目录 **`.env`** | **构建时**注入：GitHub **Actions secrets**（见 `.github/workflows/deploy-github-pages.yml`）或 Vercel 环境变量；**不会**自动同步 `.env` |
+
+**核对清单（与 `.env` 同名复制到 GitHub / Vercel）：**  
+`KIMI_API_KEY` 或 `MOONSHOT_API_KEY`、`KIMI_MOONSHOT_HOST`（国内站 `cn`，国际站 `ai`）、`ARK_API_KEY`；可选 `KIMI_MODEL`、`KIMI_API_BASE`、`ARK_*`、`VITE_*`。详见 [`.env.example`](.env.example) 文末「线上构建」说明。
+
+**改完线上密钥后：** 必须重新触发部署（例如 Actions 里 **Re-run** 或 `git push`），浏览器 **强制刷新**（Cmd+Shift+R），否则仍是旧 JS。
+
+**浏览器 DevTools → Network：** 点一次识图；若状态为 **401**，多为密钥 / `KIMI_MOONSHOT_HOST` 与密钥来源不一致，或构建未带入 Secret；若出现 **CORS / failed**，为直连跨域策略，与本地代理路径不同，需自建 `KIMI_API_BASE` 等网关（见 `kimiService.ts`）。
 
 ## 说明
 
