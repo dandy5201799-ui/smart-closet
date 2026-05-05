@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>智能衣橱 AI</title>
+    
+    <!-- iOS PWA 支持 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="智能衣橱" />
+    
+    <!-- 桌面图标 -->
+    <link rel="apple-touch-icon" href="icon.png" />
+    <link rel="icon" type="image/png" href="icon.png" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            },
+            colors: {
+              // 重定义 brand 为更高级的色调 (Deep Violet)
+              brand: {
+                50: '#f5f3ff',
+                100: '#ede9fe',
+                200: '#ddd6fe',
+                300: '#c4b5fd',
+                400: '#a78bfa',
+                500: '#8b5cf6', // 主要 AI 色
+                600: '#7c3aed',
+                900: '#4c1d95',
+              },
+              // 引入 Stone 色系用于背景，营造高级暖灰感
+              stone: {
+                50: '#fafaf9',
+                100: '#f5f5f4',
+                200: '#e7e5e4',
+                300: '#d6d3d1',
+                800: '#292524',
+                900: '#1c1917',
+              }
+            },
+            animation: {
+              'scan': 'scan 2s linear infinite',
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              scan: {
+                '0%': { top: '0%' },
+                '50%': { top: '100%' },
+                '100%': { top: '0%' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --safe-area-inset-top: env(safe-area-inset-top);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
+      }
+      
+      /* 修复底部白条的关键：同步 html 背景色 */
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #fafaf9; /* Stone-50 */
+      }
+
+      body {
+      margin: 0;
+      padding: 0; 
+      /* 关键：使用 dvh (Dynamic Viewport Height) 确保真正填满屏幕 */
+      height: 100dvh; 
+      width: 100%;
+      overflow: hidden;
+      background-color: #fafaf9;
+      }
+
+      body {
+        /* 放弃 fixed 锁定，改用伸缩盒强制撑满 */
+        display: flex;
+        flex-direction: column;
+      }
+
+      #root {
+        /* 确保根节点继承 100dvh 的高度 */
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #fafaf9;
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+      
+      /* 优雅的模糊效果类 */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+      }
+      /* 仅开发：index.tsx 在地址 ?mobile=1 时为 html 加上此类名，便于 Cursor 等窄预览模拟手机宽度 */
+      html.dev-mobile-preview body {
+        display: flex;
+        justify-content: center;
+        background: #d6d3d1;
+      }
+      html.dev-mobile-preview #root {
+        width: 100%;
+        max-width: 390px;
+        min-height: 100dvh;
+        min-height: 100vh;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+        background: #fafaf9;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/"
+  }
+}
+</script>
+</head>
+  <body class="bg-stone-50 text-stone-900 antialiased selection:bg-brand-500 selection:text-white font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

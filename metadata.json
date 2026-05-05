@@ -1,0 +1,7 @@
+{
+  "name": "智能衣橱 最终版本",
+  "description": "您的智能时尚管家。批量上传照片，AI 自动抠图、分类并整理入库，轻松管理您的电子衣橱。",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
