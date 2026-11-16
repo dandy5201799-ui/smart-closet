@@ -1,13 +1,5 @@
-# 构建 Vite 产物并推送到 gh-pages 分支，供 GitHub Pages 使用。
-# 仓库 Settings → Pages → Build and deployment → Source 选「Deploy from a branch」→ Branch 选 gh-pages / /(root)
-#
-# Repository secrets（名称须与 .env.example「线上构建」一节一致，值从本机 .env 逐项复制）：
-#   必填：KIMI_API_KEY 或 MOONSHOT_API_KEY；ARK_API_KEY；KIMI_MOONSHOT_HOST（cn / ai）
-#   可选：KIMI_MODEL、KIMI_API_BASE、ARK_IMAGE_ENDPOINT、ARK_IMAGE_MODEL、ARK_OUTFIT_MAX_REF_IMAGES、
-#         VITE_OUTFIT_DEFAULT_CITY、VITE_DOUYIN_PREVIEW_URL
-# 修改任一 Secret 后：Actions → 本 workflow → Re-run all jobs，再强刷浏览器。
-# 与 Vercel 相同：密钥会打进前端包；公开仓库时勿依赖密钥保密。
-
+# Public static builds must not receive provider API credentials.
+# Kimi and Ark features remain disabled online until a server-side proxy is configured.
 name: Deploy GitHub Pages
 
 on:
@@ -49,12 +41,9 @@ jobs:
       - name: Build
         env:
           GITHUB_PAGES_BASE: ${{ steps.pages.outputs.base }}
-          KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
-          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
           KIMI_MODEL: ${{ secrets.KIMI_MODEL }}
           KIMI_API_BASE: ${{ secrets.KIMI_API_BASE }}
           KIMI_MOONSHOT_HOST: ${{ secrets.KIMI_MOONSHOT_HOST }}
-          ARK_API_KEY: ${{ secrets.ARK_API_KEY }}
           ARK_IMAGE_ENDPOINT: ${{ secrets.ARK_IMAGE_ENDPOINT }}
           ARK_IMAGE_MODEL: ${{ secrets.ARK_IMAGE_MODEL }}
           ARK_OUTFIT_MAX_REF_IMAGES: ${{ secrets.ARK_OUTFIT_MAX_REF_IMAGES }}

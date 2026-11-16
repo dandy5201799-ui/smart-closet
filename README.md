@@ -36,26 +36,16 @@
 
 - `npm run build` — 生产构建  
 - `npm run preview` — 预览**已有**的 `dist/`  
-- `npm run build:preview` — 先构建再预览（模拟线上静态包；需已配置 `.env`，与 CI 注入方式一致）
+- `npm run build:preview` — 先构建再预览（模拟线上静态包，不包含 API 密钥）
 
-## 本地正常、线上异常：原因与排查
+## 公开部署与密钥安全
 
-| 对比 | 本地 `npm run dev` | GitHub Pages / Vercel 生产包 |
-|------|-------------------|------------------------------|
-| Kimi / 方舟请求 | 走 Vite **同源代理**（`vite.config.ts`），减轻浏览器跨域 | 浏览器 **直连** `api.moonshot.*` / `ark.*` |
-| 密钥来源 | 根目录 **`.env`** | **构建时**注入：GitHub **Actions secrets**（见 `.github/workflows/deploy-github-pages.yml`）或 Vercel 环境变量；**不会**自动同步 `.env` |
-
-**核对清单（与 `.env` 同名复制到 GitHub / Vercel）：**  
-`KIMI_API_KEY` 或 `MOONSHOT_API_KEY`、`KIMI_MOONSHOT_HOST`（国内站 `cn`，国际站 `ai`）、`ARK_API_KEY`；可选 `KIMI_MODEL`、`KIMI_API_BASE`、`ARK_*`、`VITE_*`。详见 [`.env.example`](.env.example) 文末「线上构建」说明。
-
-**改完线上密钥后：** 必须重新触发部署（例如 Actions 里 **Re-run** 或 `git push`），浏览器 **强制刷新**（Cmd+Shift+R），否则仍是旧 JS。
-
-**浏览器 DevTools → Network：** 点一次识图；若状态为 **401**，多为密钥 / `KIMI_MOONSHOT_HOST` 与密钥来源不一致，或构建未带入 Secret；若出现 **CORS / failed**，为直连跨域策略，与本地代理路径不同，需自建 `KIMI_API_BASE` 等网关（见 `kimiService.ts`）。
-
-## 说明
-
-- 密钥通过 Vite 写入前端，**仅适合本地或个人使用**；上线请用后端代理，勿把密钥打进公开静态资源。
-- **火山接口**：开发模式下默认经 Vite 代理访问，减轻浏览器跨域问题；`preview`/线上若跨域失败，可将 `ARK_IMAGE_ENDPOINT` 设为你方网关地址。
+- 生产构建不会注入 `KIMI_API_KEY`、`MOONSHOT_API_KEY` 或 `ARK_API_KEY`，即使构建环境中设置了这些变量。
+- GitHub Pages 构建不再读取这些 API 密钥。不要把新的提供商密钥放进前端代码、`VITE_*` 变量或公开静态文件。
+- 公开静态站点的 AI 识别、搭配和生图暂时不可用；衣橱的本地存储等基础功能不受此保护措施影响。
+- 本地 `npm run dev` 仍可读取未提交的 `.env`。仅在可信本机使用，不要将开发服务器暴露到公开网络。
+- 如需恢复线上 AI 功能，应先实现服务端代理，由服务端保存密钥并进行访问控制；本项目尚未实现该代理。
+- 从最新文件移除密钥不会撤销凭据，也不会清除旧提交、缓存或已经下载的副本。曾公开的密钥仍需要在对应服务控制台撤销或更换。
 
 ## 代码入口
 

@@ -10,8 +10,10 @@ function githubPagesBase(): string {
     return withSlash.endsWith('/') ? withSlash : `${withSlash}/`;
 }
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
     const env = loadEnv(mode, '.', '');
+    // API credentials are for local development only. Never embed them in a static build.
+    const localApiKey = (name: string): string => command === 'serve' ? (env[name] ?? '') : '';
     return {
       base: githubPagesBase(),
       server: {
@@ -40,12 +42,12 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react(), douyinPreviewPlugin()],
       define: {
-        'process.env.KIMI_API_KEY': JSON.stringify(env.KIMI_API_KEY ?? ''),
-        'process.env.MOONSHOT_API_KEY': JSON.stringify(env.MOONSHOT_API_KEY ?? ''),
+        'process.env.KIMI_API_KEY': JSON.stringify(localApiKey('KIMI_API_KEY')),
+        'process.env.MOONSHOT_API_KEY': JSON.stringify(localApiKey('MOONSHOT_API_KEY')),
         'process.env.KIMI_MODEL': JSON.stringify(env.KIMI_MODEL ?? ''),
         'process.env.KIMI_API_BASE': JSON.stringify(env.KIMI_API_BASE ?? ''),
         'process.env.KIMI_MOONSHOT_HOST': JSON.stringify(env.KIMI_MOONSHOT_HOST ?? ''),
-        'process.env.ARK_API_KEY': JSON.stringify(env.ARK_API_KEY ?? ''),
+        'process.env.ARK_API_KEY': JSON.stringify(localApiKey('ARK_API_KEY')),
         'process.env.ARK_IMAGE_ENDPOINT': JSON.stringify(env.ARK_IMAGE_ENDPOINT ?? ''),
         'process.env.ARK_IMAGE_MODEL': JSON.stringify(env.ARK_IMAGE_MODEL ?? ''),
         'process.env.ARK_OUTFIT_MAX_REF_IMAGES': JSON.stringify(env.ARK_OUTFIT_MAX_REF_IMAGES ?? ''),
